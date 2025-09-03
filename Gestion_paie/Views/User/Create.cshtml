@@ -1,0 +1,79 @@
+﻿@model Gestion_paie.Models.User
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Ajouter un utilisateur";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card card-primary shadow-sm">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-user-plus"></i> @ViewData["Title"]</h3>
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Username"></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input asp-for="Username" class="form-control" placeholder="Nom d'utilisateur" />
+                        </div>
+                        <span asp-validation-for="Username" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Email"></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input asp-for="Email" class="form-control" placeholder="Adresse email" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="PasswordHash">Mot de passe</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            </div>
+                            <input asp-for="PasswordHash" type="password" class="form-control" placeholder="Mot de passe" />
+                        </div>
+                        <span asp-validation-for="PasswordHash" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="RoleId">Rôle</label>
+                        <select asp-for="RoleId" asp-items="@(new SelectList(ViewBag.Roles, "Id", "Name"))" class="form-control">
+                            <option value="">-- Sélectionner un rôle --</option>
+                        </select>
+                        <span asp-validation-for="RoleId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a class="btn btn-secondary" asp-action="Index">
+                            <i class="fas fa-arrow-left"></i> Annuler
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Enregistrer
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

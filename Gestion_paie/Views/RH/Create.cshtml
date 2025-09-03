@@ -1,0 +1,140 @@
+﻿@model Gestion_paie.Models.Employee
+@{
+    ViewData["Title"] = "Ajouter un employé";
+}
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-user-plus"></i> @ViewData["Title"]
+        </h3>
+    </div>
+    <div class="card-body">
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+
+        <form asp-action="Create" method="post">
+            <div class="card-body">
+
+                <div class="col-md-6">
+                    <div class="form-group ">
+                        <label asp-for="UserId">Utilisateur</label>
+                        <select asp-for="UserId" class="form-control" asp-items="ViewBag.Users">
+                            <option value="">-- Sélectionnez un utilisateur --</option>
+                        </select>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label asp-for="FirstName"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="LastName"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="BirthDate"></label>
+                        <input asp-for="BirthDate" type="date" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="HireDate"></label>
+                        <input asp-for="HireDate" type="date" class="form-control" />
+                        <span asp-validation-for="HireDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="CNSSNumber"></label>
+                        <input asp-for="CNSSNumber" class="form-control" />
+                        <span asp-validation-for="CNSSNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="CIN"></label>
+                        <input asp-for="CIN" class="form-control" />
+                        <span asp-validation-for="CIN" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                 
+
+                    <div class="form-group">
+                        <label asp-for="ContractType"></label>
+                        <input asp-for="ContractType" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Position"></label>
+                        <input asp-for="Position" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Department"></label>
+                        <input asp-for="Department" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="BaseSalary"></label>
+                        <input asp-for="BaseSalary" type="number" step="0.01" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="BankAccount"></label>
+                        <input asp-for="BankAccount" class="form-control" />
+                        <span asp-validation-for="BankAccount" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="BankCode"></label>
+                        <input asp-for="BankCode" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="MaritalStatus"></label>
+                        <input asp-for="MaritalStatus" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="DependentsCount"></label>
+                        <input asp-for="DependentsCount" type="number" min="0" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Status"></label>
+                        <input asp-for="Status" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="TerminationDate"></label>
+                        <input asp-for="TerminationDate" type="date" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i> Enregistrer
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Annuler
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

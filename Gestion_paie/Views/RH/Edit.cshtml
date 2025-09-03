@@ -1,0 +1,102 @@
+﻿@model Gestion_paie.Models.Employee
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-user-edit"></i> Modifier un Employé</h3>
+    </div>
+
+    <form asp-action="Edit" method="post">
+        <div class="card-body">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="EmployeeNumber"></label>
+                <input asp-for="EmployeeNumber" class="form-control" placeholder="Matricule" readonly />
+                <span asp-validation-for="EmployeeNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CIN"></label>
+                <input asp-for="CIN" class="form-control" placeholder="Carte d'identité" />
+                <span asp-validation-for="CIN" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="form-control" placeholder="Nom" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" placeholder="Prénom" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Position"></label>
+                <input asp-for="Position" class="form-control" placeholder="Poste" />
+                <span asp-validation-for="Position" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Department"></label>
+                <input asp-for="Department" class="form-control" placeholder="Département" />
+                <span asp-validation-for="Department" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="BaseSalary"></label>
+                <input asp-for="BaseSalary" class="form-control" placeholder="Salaire de base" />
+                <span asp-validation-for="BaseSalary" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HireDate"></label>
+                <input asp-for="HireDate" type="date" class="form-control" />
+                <span asp-validation-for="HireDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Status"></label>
+                <input asp-for="Status" class="form-control" placeholder="Statut" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="BankCode"></label>
+                <input asp-for="BankCode" class="form-control" placeholder="Code Banque" />
+                <span asp-validation-for="BankCode" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CNSSNumber"></label>
+                <input asp-for="CNSSNumber" class="form-control" placeholder="N° CNSS" />
+                <span asp-validation-for="CNSSNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="BankAccount"></label>
+                <input asp-for="BankAccount" class="form-control" placeholder="N° Compte Bancaire" />
+                <span asp-validation-for="BankAccount" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ContractType"></label>
+                <input asp-for="ContractType" class="form-control" placeholder="Type de contrat" />
+                <span asp-validation-for="ContractType" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MaritalStatus"></label>
+                <input asp-for="MaritalStatus" class="form-control" placeholder="Situation familiale" />
+                <span asp-validation-for="MaritalStatus" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Enregistrer</button>
+            <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Retour</a>
+        </div>
+    </form>
+</div>
