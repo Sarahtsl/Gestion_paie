@@ -1,0 +1,118 @@
+﻿@model Gestion_paie.Models.TaxBracket
+
+@{
+    ViewData["Title"] = "Ajouter un Tax Bracket";
+    Layout = "_Layout";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card card-primary shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title m-0">
+                    <i class="fas fa-percentage"></i> @ViewData["Title"]
+                </h3>
+            </div>
+
+            <form asp-action="Create" method="post" id="taxForm">
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Date d'application -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="EffectiveDate" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                <input asp-for="EffectiveDate" class="form-control" type="date" />
+                            </div>
+                            <span asp-validation-for="EffectiveDate" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Taux -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="TaxRate" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-percent"></i></span>
+                                <input asp-for="TaxRate" class="form-control" type="number" step="0.0001" min="0" max="9.9999" placeholder="Ex: 5.1234" />
+                            </div>
+                            <span asp-validation-for="TaxRate" class="text-danger small"></span>
+                            <span id="taxRateError" class="text-danger small d-none">
+                                Le taux d'imposition ne peut pas dépasser 9.9999
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Montant minimum -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="MinAmount" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-arrow-down"></i></span>
+                                <input asp-for="MinAmount" class="form-control" type="number" step="0.01" min="0" max="9999999999.99" placeholder="Montant minimum" />
+                            </div>
+                            <span asp-validation-for="MinAmount" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Montant maximum -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="MaxAmount" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-arrow-up"></i></span>
+                                <input asp-for="MaxAmount" class="form-control" type="number" step="0.01" min="0" max="9999999999.99" placeholder="Montant maximum" />
+                            </div>
+                            <span asp-validation-for="MaxAmount" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Montant fixe -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="FixedAmount" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                <input asp-for="FixedAmount" class="form-control" type="number" step="0.01" min="0" max="9999999999.99" placeholder="Montant fixe" />
+                            </div>
+                            <span asp-validation-for="FixedAmount" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Actif -->
+                        <div class="col-md-6 d-flex align-items-center">
+                            <div class="form-check mt-4">
+                                <input asp-for="IsActive" class="form-check-input" type="checkbox" checked />
+                                <label asp-for="IsActive" class="form-check-label"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Annuler
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        document.getElementById("taxForm").addEventListener("submit", function (e) {
+            let taxRateInput = document.querySelector("[name='TaxRate']");
+            let errorSpan = document.getElementById("taxRateError");
+            let value = parseFloat(taxRateInput.value);
+
+            if (value > 9.9999) {
+                e.preventDefault();
+                errorSpan.classList.remove("d-none");
+                taxRateInput.focus();
+            } else {
+                errorSpan.classList.add("d-none");
+            }
+        });
+    </script>
+}

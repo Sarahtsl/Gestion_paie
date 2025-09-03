@@ -1,0 +1,131 @@
+﻿@model Gestion_paie.Models.CnssRate
+
+@{
+    ViewData["Title"] = "Modifier un taux CNSS";
+    Layout = "_Layout";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-10">
+        <div class="card card-primary shadow-sm">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-edit"></i> @ViewData["Title"]
+                </h3>
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="form-group mb-3">
+                        <label asp-for="EffectiveDate"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                            <input asp-for="EffectiveDate" class="form-control" type="date" />
+                        </div>
+                        <span asp-validation-for="EffectiveDate" class="text-danger small"></span>
+                    </div>
+
+                    <h5 class="text-primary mt-4"><i class="fas fa-user"></i> Part Salarié</h5>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="FamilyAllowanceRate"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-child"></i></span>
+                                <input asp-for="FamilyAllowanceRate" class="form-control" type="number" step="0.0001" />
+                            </div>
+                            <span asp-validation-for="FamilyAllowanceRate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="AmoRate"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-heartbeat"></i></span>
+                                <input asp-for="AmoRate" class="form-control" type="number" step="0.0001" />
+                            </div>
+                            <span asp-validation-for="AmoRate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="AccidentRate"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-first-aid"></i></span>
+                                <input asp-for="AccidentRate" class="form-control" type="number" step="0.0001" />
+                            </div>
+                            <span asp-validation-for="AccidentRate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="RetirementRate"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user-clock"></i></span>
+                                <input asp-for="RetirementRate" class="form-control" type="number" step="0.0001" />
+                            </div>
+                            <span asp-validation-for="RetirementRate" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <h5 class="text-primary mt-4"><i class="fas fa-building"></i> Part Patronale</h5>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="EmployerFamilyRate"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-child"></i></span>
+                                <input asp-for="EmployerFamilyRate" class="form-control" type="number" step="0.0001" />
+                            </div>
+                            <span asp-validation-for="EmployerFamilyRate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="EmployerAmoRate"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-heartbeat"></i></span>
+                                <input asp-for="EmployerAmoRate" class="form-control" type="number" step="0.0001" />
+                            </div>
+                            <span asp-validation-for="EmployerAmoRate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="EmployerAccidentRate"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-first-aid"></i></span>
+                                <input asp-for="EmployerAccidentRate" class="form-control" type="number" step="0.0001" />
+                            </div>
+                            <span asp-validation-for="EmployerAccidentRate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="EmployerRetirementRate"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user-clock"></i></span>
+                                <input asp-for="EmployerRetirementRate" class="form-control" type="number" step="0.0001" />
+                            </div>
+                            <span asp-validation-for="EmployerRetirementRate" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input asp-for="IsActive" class="form-check-input" checked />
+                        <label asp-for="IsActive" class="form-check-label"></label>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Retour
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Sauvegarder
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -4,6 +4,7 @@ using Gestion_paie.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gestion_paie.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20250903103337_CreateCnssRatesTable")]
+    partial class CreateCnssRatesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,40 +301,6 @@ namespace Gestion_paie.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("YourNamespace.Models.TaxBracket", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EffectiveDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("FixedAmount")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal?>("MaxAmount")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("MinAmount")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("TaxRate")
-                        .HasColumnType("decimal(5,4)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TaxBrackets");
                 });
 
             modelBuilder.Entity("Gestion_paie.Models.Employee", b =>

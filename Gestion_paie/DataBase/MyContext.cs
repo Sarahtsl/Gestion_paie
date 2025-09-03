@@ -1,6 +1,7 @@
 ﻿using Gestion_paie.Models;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Gestion_paie.DataBase
 {
     public class MyContext : DbContext
@@ -11,6 +12,8 @@ namespace Gestion_paie.DataBase
         public DbSet<User> Users { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Company> Companies { get; set; }
+        public DbSet<CnssRate> CnssRates { get; set; }
+        public DbSet<TaxBracket> TaxBrackets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
