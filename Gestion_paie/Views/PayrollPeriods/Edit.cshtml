@@ -1,0 +1,113 @@
+﻿@model Gestion_paie.Models.PayrollPeriod
+@{
+    ViewData["Title"] = "Modifier une période de paie";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-10">
+        <div class="card card-primary shadow-sm">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-calendar"></i> @ViewData["Title"]</h3>
+            </div>
+
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="CompanyId"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-building"></i></span>
+                            <select asp-for="CompanyId" asp-items="ViewBag.Companies" class="form-control"></select>
+                        </div>
+                        <span asp-validation-for="CompanyId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row">
+                       
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="PeriodYear"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                <input asp-for="PeriodYear" class="form-control" />
+                            </div>
+                            <span asp-validation-for="PeriodYear" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="PeriodMonth"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar-day"></i></span>
+                                <input asp-for="PeriodMonth" class="form-control" />
+                            </div>
+                            <span asp-validation-for="PeriodMonth" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="StartDate"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                <input asp-for="StartDate" type="date" class="form-control" />
+                            </div>
+                            <span asp-validation-for="StartDate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="EndDate"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                <input asp-for="EndDate" type="date" class="form-control" />
+                            </div>
+                            <span asp-validation-for="EndDate" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                       
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Status"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-toggle-on"></i></span>
+                                <select asp-for="Status"
+                                        asp-items="Html.GetEnumSelectList<Gestion_paie.Models.PayrollPeriodStatus>()"
+                                        class="form-control">
+                                </select>
+                            </div>
+                            <span asp-validation-for="Status" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProcessedAt"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                <input asp-for="ProcessedAt" type="datetime-local" class="form-control" />
+                            </div>
+                            <small class="form-text text-muted">Laisser vide si non traité.</small>
+                            <span asp-validation-for="ProcessedAt" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Retour
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

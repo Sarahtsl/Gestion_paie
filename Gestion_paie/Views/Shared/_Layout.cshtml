@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="~/plugins/summernote/summernote-bs4.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
-    
+
     <div class="wrapper">
 
 
@@ -134,7 +134,7 @@
                     </div>
                 </li>
                 <!-- Notifications Dropdown Menu -->
-              
+
                 <li class="nav-item">
                     <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                         <i class="fas fa-expand-arrows-alt"></i>
@@ -153,18 +153,17 @@
             </ul>
         </nav>
         <!-- /.navbar -->
-    
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index3.html" class="brand-link">
-                <img src="~/Screenshot 2025-09-02 100810.png"  class="brand-image img-circle elevation-3" style="opacity: .8">
+                <img src="~/Screenshot 2025-09-02 100810.png" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light"> NovaPaie </span>
             </a>
 
             <!-- Sidebar -->
             <div class="sidebar">
-               
+
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
                     <div class="input-group" data-widget="sidebar-search">
@@ -253,13 +252,13 @@
                                 <p>
                                     Taux
                                     <i class="fas fa-angle-left right"></i>
-                                    
+
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
 
                                 <li class="nav-item">
-                                    <p>  <small class="text-white"> --> CNSS  </small> </p>
+                                    <p class="text-white"> --> CNSS  </p>
                                 </li>
 
                                 <li class="nav-item">
@@ -272,12 +271,12 @@
                                 <li class="nav-item">
                                     <a asp-controller="CnssRates" asp-action="Create" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Ajouter un taux</p>
+                                        <p>Ajouter CNSS</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <p> <small class="text-white"> --> TAX  </small> </p>
+                                    <p class="text-white">  --> TAX  </p>
                                 </li>
 
                                 <li class="nav-item">
@@ -293,31 +292,20 @@
                                         <p>Ajouter un Tax</p>
                                     </a>
                                 </li>
-                               
+
                                 <li class="nav-item">
-                                    <a asp-controller="TaxDeduction" asp-action="Index" class="nav-link">
+                                   <a asp-controller="TaxDeduction" asp-action="Index" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p> Tax Deduction  </p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a asp-controller="TaxDeduction" asp-action="Create" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p> Ajouter Tax_Deduction  </p>
+                                         <i class="far fa-circle nav-icon"></i>
+                                          <p> Ajouter Tax_Deduction  </p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="pages/layout/fixed-footer.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Fixed Footer</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="pages/layout/collapsed-sidebar.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Collapsed Sidebar</p>
-                                    </a>
-                                </li>
+
                             </ul>
                         </li>
 
@@ -325,35 +313,27 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-edit"></i>
                                 <p>
-                                    Forms
+                                    Payroll
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+
                                 <li class="nav-item">
-                                    <a href="pages/forms/general.html" class="nav-link">
+                                    <a asp-controller="PayrollPeriods" asp-action="Index" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>General Elements</p>
+                                        <p>Afficher Periods</p>
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
-                                    <a href="pages/forms/advanced.html" class="nav-link">
+                                    <a asp-controller="PayrollPeriods" asp-action="Create" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Advanced Elements</p>
+                                        <p>Ajouter Periods</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="pages/forms/editors.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Editors</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="pages/forms/validation.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Validation</p>
-                                    </a>
-                                </li>
+                              
+                               
                             </ul>
                         </li>
 
@@ -403,7 +383,7 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-        
+
             <section class="content">
                 @RenderBody()
             </section>

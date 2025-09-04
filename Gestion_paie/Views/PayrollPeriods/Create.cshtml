@@ -1,0 +1,99 @@
+﻿@model Gestion_paie.Models.PayrollPeriod
+
+@{
+    ViewData["Title"] = "Créer une période de paie";
+    Layout = "_Layout";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-10">
+        <div class="card card-primary shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title m-0">
+                    <i class="fas fa-calendar-alt"></i> @ViewData["Title"]
+                </h3>
+            </div>
+
+            <div class="card-body">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+                }
+
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                      
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="CompanyId"></label>
+                                <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.Companies">
+                                    <option value="">-- Sélectionner une société --</option>
+                                </select>
+                                <span asp-validation-for="CompanyId" class="text-danger small"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="PeriodYear"></label>
+                                <input asp-for="PeriodYear" class="form-control" placeholder="Ex: 2025" />
+                                <span asp-validation-for="PeriodYear" class="text-danger small"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="PeriodMonth"></label>
+                                <input asp-for="PeriodMonth" class="form-control" placeholder="1 à 12" />
+                                <span asp-validation-for="PeriodMonth" class="text-danger small"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="StartDate"></label>
+                                <input asp-for="StartDate" type="date" class="form-control" />
+                                <span asp-validation-for="StartDate" class="text-danger small"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="EndDate"></label>
+                                <input asp-for="EndDate" type="date" class="form-control" />
+                                <span asp-validation-for="EndDate" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="Status"></label>
+                                <select asp-for="Status" class="form-control"
+                                        asp-items="Html.GetEnumSelectList<Gestion_paie.Models.PayrollPeriodStatus>()">
+                                </select>
+                                <span asp-validation-for="Status" class="text-danger small"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="ProcessedAt"></label>
+                                <input asp-for="ProcessedAt" type="datetime-local" class="form-control" />
+                                <small class="form-text text-muted">Laisser vide si non traité.</small>
+                                <span asp-validation-for="ProcessedAt" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="submit" class="btn btn-success me-2">
+                            <i class="fas fa-save"></i> Enregistrer
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

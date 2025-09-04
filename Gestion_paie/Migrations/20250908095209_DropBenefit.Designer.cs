@@ -4,6 +4,7 @@ using Gestion_paie.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gestion_paie.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20250908095209_DropBenefit")]
+    partial class DropBenefit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,51 +83,6 @@ namespace Gestion_paie.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BenefitTypes");
-                });
-
-            modelBuilder.Entity("GestionPaie.Models.PayrollItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool>("IsCnssSubject")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsTaxable")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ItemType")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasColumnName("item_type");
-
-                    b.Property<int>("PayrollId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PayrollId");
-
-                    b.ToTable("payroll_items");
                 });
 
             modelBuilder.Entity("Gestion_paie.Models.CnssRate", b =>
@@ -632,17 +590,6 @@ namespace Gestion_paie.Migrations
                     b.Navigation("Payroll");
                 });
 
-            modelBuilder.Entity("GestionPaie.Models.PayrollItem", b =>
-                {
-                    b.HasOne("Gestion_paie.Models.Payroll", "Payroll")
-                        .WithMany("PayrollItems")
-                        .HasForeignKey("PayrollId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Payroll");
-                });
-
             modelBuilder.Entity("Gestion_paie.Models.Employee", b =>
                 {
                     b.HasOne("Gestion_paie.Models.Company", "Company")
@@ -707,8 +654,6 @@ namespace Gestion_paie.Migrations
             modelBuilder.Entity("Gestion_paie.Models.Payroll", b =>
                 {
                     b.Navigation("Benefits");
-
-                    b.Navigation("PayrollItems");
                 });
 
             modelBuilder.Entity("Gestion_paie.Models.Role", b =>

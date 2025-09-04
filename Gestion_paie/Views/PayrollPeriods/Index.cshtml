@@ -1,0 +1,103 @@
+﻿@model IEnumerable<Gestion_paie.Models.PayrollPeriod>
+
+@{
+    ViewData["Title"] = "Liste des périodes de paie";
+    Layout = "_Layout";
+}
+
+<div class="card card-primary mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h3 class="card-title m-0">@ViewData["Title"]</h3>
+
+        
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-bordered table-striped table-hover mb-0" id="tb">
+            <thead>
+                <tr>
+                    <th style="white-space:nowrap;">Année</th>
+                    <th>Mois</th>
+                    <th>Société</th>
+                    <th>Début</th>
+                    <th>Fin</th>
+                    <th>Statut</th>
+                    <th>Créé le</th>
+                    <th class="text-center" style="width:160px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.PeriodYear</td>
+                            <td>@item.PeriodMonth</td>
+                            <td>@item.Company?.Name</td>
+                            <td>@item.StartDate.ToString("dd/MM/yyyy")</td>
+                            <td>@item.EndDate.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                @switch (item.Status)
+                                {
+                                    case Gestion_paie.Models.PayrollPeriodStatus.DRAFT:
+                                        <span class="badge bg-secondary">Brouillon</span>
+                                        break;
+                                    case Gestion_paie.Models.PayrollPeriodStatus.PROCESSING:
+                                        <span class="badge bg-info">En cours</span>
+                                        break;
+                                    case Gestion_paie.Models.PayrollPeriodStatus.COMPLETED:
+                                        <span class="badge bg-success">Terminé</span>
+                                        break;
+                                    case Gestion_paie.Models.PayrollPeriodStatus.LOCKED:
+                                        <span class="badge bg-danger">Verrouillé</span>
+                                        break;
+                                }
+                            </td>
+                            <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="text-center">
+                                <a asp-action="Edit" asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-primary me-1" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                <form asp-action="Delete" asp-route-id="@item.Id"
+                                      method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit"
+                                            class="btn btn-sm btn-danger"
+                                            title="Supprimer"
+                                            onclick="return confirm('Voulez-vous vraiment supprimer cette période ?');">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center p-4 text-muted">
+                            Aucune période enregistrée pour le moment.
+                            <a asp-action="Create" class="ms-1">Créer une première période</a>.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function filterRows() {
+            const q = document.getElementById('q').value.toLowerCase();
+            const rows = document.querySelectorAll('#tb tbody tr');
+            rows.forEach(tr => {
+                const text = tr.innerText.toLowerCase();
+                tr.style.display = text.includes(q) ? '' : 'none';
+            });
+        }
+    </script>
+}
