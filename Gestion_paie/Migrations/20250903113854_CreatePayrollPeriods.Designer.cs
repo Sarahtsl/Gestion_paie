@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gestion_paie.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20250902102041_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250903113854_CreatePayrollPeriods")]
+    partial class CreatePayrollPeriods
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -192,6 +192,46 @@ namespace Gestion_paie.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("Gestion_paie.Models.PayrollPeriod", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PeriodMonth")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PeriodYear")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ProcessedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("PayrollPeriods");
+                });
+
             modelBuilder.Entity("Gestion_paie.Models.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -272,6 +312,15 @@ namespace Gestion_paie.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Gestion_paie.Models.PayrollPeriod", b =>
+                {
+                    b.HasOne("Gestion_paie.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("Gestion_paie.Models.User", b =>
