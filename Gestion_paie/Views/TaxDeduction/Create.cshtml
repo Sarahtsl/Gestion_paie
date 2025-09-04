@@ -1,0 +1,98 @@
+﻿@model Gestion_paie.Models.TaxDeduction
+
+@{
+    ViewData["Title"] = "Ajouter une déduction fiscale";
+    Layout = "_Layout";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card card-primary shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title m-0">
+                    <i class="fas fa-plus-circle"></i> @ViewData["Title"]
+                </h3>
+          
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Name"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
+                            <input asp-for="Name" class="form-control" placeholder="Nom de la déduction" />
+                        </div>
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="DeductionType"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-tags"></i></span>
+                            <select asp-for="DeductionType" class="form-control">
+                                <option value="">-- Sélectionnez un type --</option>
+                                <option value="personal">Personnel</option>
+                                <option value="dependent">Dépendant</option>
+                                <option value="professional">Professionnel</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="DeductionType" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Amount"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-coins"></i></span>
+                            <input asp-for="Amount" class="form-control" type="number" step="0.01" placeholder="Montant fixe" />
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Percentage"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-percentage"></i></span>
+                            <input asp-for="Percentage" class="form-control" type="number" step="0.0001" placeholder="Pourcentage (0 à 1)" />
+                        </div>
+                        <span asp-validation-for="Percentage" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="MaxAmount"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-balance-scale"></i></span>
+                            <input asp-for="MaxAmount" class="form-control" type="number" step="0.01" placeholder="Montant maximum" />
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="EffectiveDate"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                            <input asp-for="EffectiveDate" class="form-control" type="date" />
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label asp-for="IsActive" class="form-check-label"></label>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Enregistrer
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

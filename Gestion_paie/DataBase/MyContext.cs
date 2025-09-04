@@ -14,6 +14,8 @@ namespace Gestion_paie.DataBase
         public DbSet<Company> Companies { get; set; }
         public DbSet<CnssRate> CnssRates { get; set; }
         public DbSet<TaxBracket> TaxBrackets { get; set; }
+        public DbSet<TaxDeduction> TaxDeductions { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

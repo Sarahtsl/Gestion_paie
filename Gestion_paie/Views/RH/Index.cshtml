@@ -10,9 +10,7 @@
         <h3 class="card-title m-0">
             <i class="fas fa-users"></i> @ViewData["Title"]
         </h3>
-        <div class="card-tools d-flex gap-2">
-         
-        </div>
+   
     </div>
 
     <div class="card-body p-0">
@@ -55,7 +53,7 @@
                         </td>
                         <td class="text-center">
                             <a asp-action="Edit" asp-route-id="@emp.Id"
-                               class="btn btn-sm btn-warning" title="Modifier">
+                               class="btn btn-sm btn-primary me-1" title="Modifier">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <form asp-action="DeleteConfirmed" method="post" style="display:inline;">
