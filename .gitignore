@@ -365,3 +365,4 @@ FodyWeavers.xsd
 # Ignorer les paramètres sensibles
 appsettings.json
 appsettings.*.json
+/Gestion_paie/appsettings.json

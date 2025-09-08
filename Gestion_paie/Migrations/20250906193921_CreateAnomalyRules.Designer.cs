@@ -4,15 +4,19 @@ using Gestion_paie.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
+
 namespace Gestion_paie.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20250906193921_CreateAnomalyRules")]
+    partial class CreateAnomalyRules
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,111 +24,6 @@ namespace Gestion_paie.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("GestionPaie.Models.BenefitInKind", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BenefitTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasColumnName("description");
-
-                    b.Property<int>("PayrollId")
-                        .HasColumnType("int")
-                        .HasColumnName("payroll_id");
-
-                    b.Property<decimal>("TaxableValue")
-                        .HasColumnType("decimal(12,2)")
-                        .HasColumnName("taxable_value");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(12,2)")
-                        .HasColumnName("value");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BenefitTypeId");
-
-                    b.HasIndex("PayrollId");
-
-                    b.ToTable("BenefitsInKind");
-                });
-
-            modelBuilder.Entity("GestionPaie.Models.BenefitType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BenefitTypes");
-                });
-
-            modelBuilder.Entity("GestionPaie.Models.PayrollItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool>("IsCnssSubject")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsTaxable")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ItemType")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasColumnName("item_type");
-
-                    b.Property<int>("PayrollId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PayrollId");
-
-                    b.ToTable("payroll_items");
-                });
 
             modelBuilder.Entity("Gestion_paie.Models.AnomalyRule", b =>
                 {
@@ -168,7 +67,61 @@ namespace Gestion_paie.Migrations
                     b.ToTable("AnomalyRules");
                 });
 
-            
+            modelBuilder.Entity("Gestion_paie.Models.BenefitInKind", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BenefitTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BenefitTypeId");
+
+                    b.ToTable("BenefitsInKind");
+                });
+
+            modelBuilder.Entity("Gestion_paie.Models.BenefitType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("BenefitTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Logement"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Vehicule"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Nourriture"
+                        });
+                });
 
             modelBuilder.Entity("Gestion_paie.Models.CnssRate", b =>
                 {
@@ -383,101 +336,6 @@ namespace Gestion_paie.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("Gestion_paie.Models.Payroll", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("BaseSalary")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("BenefitsInKind")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("BonusAmount")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("CnssAccident")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("CnssAmo")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("CnssFamilyAllowance")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("CnssRetirement")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("CommissionAmount")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("EmployerAccident")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("EmployerAmo")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("EmployerFamilyAllowance")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("EmployerRetirement")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("GrossSalary")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("IncomeTax")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("NetSalary")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("OvertimeAmount")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("OvertimeHours")
-                        .HasColumnType("decimal(5,2)");
-
-                    b.Property<int>("PeriodId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<decimal>("TaxableIncome")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("WorkedDays")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WorkingDays")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PeriodId");
-
-                    b.HasIndex("EmployeeId", "PeriodId")
-                        .IsUnique();
-
-                    b.ToTable("Payrolls");
-                });
-
             modelBuilder.Entity("Gestion_paie.Models.PayrollPeriod", b =>
                 {
                     b.Property<int>("Id")
@@ -677,34 +535,26 @@ namespace Gestion_paie.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("GestionPaie.Models.BenefitInKind", b =>
+            modelBuilder.Entity("Gestion_paie.Models.AnomalyRule", b =>
                 {
-                    b.HasOne("GestionPaie.Models.BenefitType", "BenefitType")
+                    b.HasOne("Gestion_paie.Models.RuleName", "RuleName")
                         .WithMany()
-                        .HasForeignKey("BenefitTypeId")
+                        .HasForeignKey("RuleNameId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Gestion_paie.Models.Payroll", "Payroll")
-                        .WithMany("Benefits")
-                        .HasForeignKey("PayrollId")
+                    b.Navigation("RuleName");
+                });
+
+            modelBuilder.Entity("Gestion_paie.Models.BenefitInKind", b =>
+                {
+                    b.HasOne("Gestion_paie.Models.BenefitType", "BenefitType")
+                        .WithMany()
+                        .HasForeignKey("BenefitTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("BenefitType");
-
-                    b.Navigation("Payroll");
-                });
-
-            modelBuilder.Entity("GestionPaie.Models.PayrollItem", b =>
-                {
-                    b.HasOne("Gestion_paie.Models.Payroll", "Payroll")
-                        .WithMany("PayrollItems")
-                        .HasForeignKey("PayrollId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Payroll");
                 });
 
             modelBuilder.Entity("Gestion_paie.Models.Employee", b =>
@@ -722,25 +572,6 @@ namespace Gestion_paie.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Gestion_paie.Models.Payroll", b =>
-                {
-                    b.HasOne("Gestion_paie.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gestion_paie.Models.PayrollPeriod", "PayrollPeriod")
-                        .WithMany()
-                        .HasForeignKey("PeriodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("PayrollPeriod");
                 });
 
             modelBuilder.Entity("Gestion_paie.Models.PayrollPeriod", b =>
@@ -766,13 +597,6 @@ namespace Gestion_paie.Migrations
             modelBuilder.Entity("Gestion_paie.Models.Company", b =>
                 {
                     b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("Gestion_paie.Models.Payroll", b =>
-                {
-                    b.Navigation("Benefits");
-
-                    b.Navigation("PayrollItems");
                 });
 
             modelBuilder.Entity("Gestion_paie.Models.Role", b =>
