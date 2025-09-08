@@ -1,5 +1,6 @@
 ﻿using Gestion_paie.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Gestion_paie.DataBase
 {
@@ -17,6 +18,9 @@ namespace Gestion_paie.DataBase
         public DbSet<TaxDeduction> TaxDeductions { get; set; }
 
         public DbSet<PayrollPeriod> PayrollPeriods { get; set; }
+        
+        public DbSet<RuleName> RuleNames { get; set; }
+        public DbSet<AnomalyRule> AnomalyRules { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -59,6 +63,40 @@ namespace Gestion_paie.DataBase
             modelBuilder.Entity<PayrollPeriod>()
                    .Property(p => p.CreatedAt)
                  .HasDefaultValueSql("GETDATE()");
+            modelBuilder.Entity<BenefitType>()
+            .HasIndex(bt => bt.Name)
+            .IsUnique();
+
+          
+
+
+            // Unicité du nom de règle
+            modelBuilder.Entity<RuleName>()
+                .HasIndex(r => r.Name)
+                .IsUnique();
+
+            // FK AnomalyRule → RuleName (pas de cascade sur un référentiel)
+            modelBuilder.Entity<AnomalyRule>()
+                .HasOne(a => a.RuleName)
+                .WithMany()
+                .HasForeignKey(a => a.RuleNameId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Stocker les enums en VARCHAR (au lieu d'int)
+            modelBuilder.Entity<AnomalyRule>()
+                .Property(a => a.RuleType)
+                .HasConversion<string>()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<AnomalyRule>()
+                .Property(a => a.Severity)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+
+            // Valeur par défaut SQL Server
+            modelBuilder.Entity<AnomalyRule>()
+                .Property(a => a.CreatedAt)
+                .HasDefaultValueSql("GETDATE()");
 
         }
     }
