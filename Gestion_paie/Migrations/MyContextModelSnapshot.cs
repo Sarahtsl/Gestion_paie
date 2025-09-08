@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
-
 namespace Gestion_paie.Migrations
 {
     [DbContext(typeof(MyContext))]
@@ -64,61 +63,7 @@ namespace Gestion_paie.Migrations
                     b.ToTable("AnomalyRules");
                 });
 
-            modelBuilder.Entity("Gestion_paie.Models.BenefitInKind", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BenefitTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BenefitTypeId");
-
-                    b.ToTable("BenefitsInKind");
-                });
-
-            modelBuilder.Entity("Gestion_paie.Models.BenefitType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("BenefitTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Logement"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Vehicule"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Nourriture"
-                        });
-                });
+            
 
             modelBuilder.Entity("Gestion_paie.Models.CnssRate", b =>
                 {
