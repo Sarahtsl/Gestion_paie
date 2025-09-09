@@ -30,7 +30,7 @@
                     @foreach (var period in ViewBag.Periods)
                     {
                         <option value="@period.Id">
-                            @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(period.PeriodMonth) @period.PeriodYear
+                                @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(period.PeriodMonth) @period.PeriodYear
                         </option>
 
                     }

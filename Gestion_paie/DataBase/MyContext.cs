@@ -13,7 +13,6 @@ namespace Gestion_paie.DataBase
         public DbSet<User> Users { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Company> Companies { get; set; }
-
         public DbSet<CnssRate> CnssRates { get; set; }
         public DbSet<TaxBracket> TaxBrackets { get; set; }
         public DbSet<TaxDeduction> TaxDeductions { get; set; }

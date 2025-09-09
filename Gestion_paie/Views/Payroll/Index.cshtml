@@ -42,15 +42,15 @@
                         <td>@payroll.NetSalary.ToString("C")</td>
                         <td>
                             <span class="badge
-                                @(payroll.Status == Gestion_paie.Models.PayrollStatus.VALIDATED ? "bg-success" :
-                                                                payroll.Status == Gestion_paie.Models.PayrollStatus.PAID ? "bg-primary" :
-                                                                "bg-warning")">
-                            @payroll.Status
-                        </span>
-                    </td>
-                    <td>@payroll.CreatedAt.ToShortDateString()</td>
-                </tr>
-                                }
+                            @(payroll.Status == Gestion_paie.Models.PayrollStatus.VALIDATED ? "bg-success" :
+                              payroll.Status == Gestion_paie.Models.PayrollStatus.PAID ? "bg-primary" :
+                              "bg-warning")">
+                                @payroll.Status
+                            </span>
+                        </td>
+                        <td>@payroll.CreatedAt.ToShortDateString()</td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
