@@ -13,7 +13,6 @@ namespace Gestion_paie.DataBase
         public DbSet<User> Users { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Company> Companies { get; set; }
-
         public DbSet<CnssRate> CnssRates { get; set; }
         public DbSet<TaxBracket> TaxBrackets { get; set; }
         public DbSet<TaxDeduction> TaxDeductions { get; set; }
@@ -22,11 +21,6 @@ namespace Gestion_paie.DataBase
         public DbSet<BenefitType> BenefitTypes { get; set; }
         public DbSet<BenefitInKind> BenefitsInKind { get; set; }
         public DbSet<PayrollItem> PayrollItems { get; set; }
-
-
-
-        public DbSet<PayrollPeriod> PayrollPeriods { get; set; }
-        
         public DbSet<RuleName> RuleNames { get; set; }
         public DbSet<AnomalyRule> AnomalyRules { get; set; }
 

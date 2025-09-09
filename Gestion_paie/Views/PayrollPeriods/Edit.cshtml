@@ -1,4 +1,5 @@
 ﻿@model Gestion_paie.Models.PayrollPeriod
+
 @{
     ViewData["Title"] = "Modifier une période de paie";
 }
@@ -17,17 +18,25 @@
                 <div class="card-body">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
 
+                    <!-- Company (verrouillé) -->
                     <div class="form-group mb-3">
                         <label asp-for="CompanyId"></label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-building"></i></span>
-                            <select asp-for="CompanyId" asp-items="ViewBag.Companies" class="form-control"></select>
+                            <!-- 🔒 Select désactivé -->
+                            <select asp-for="CompanyId"
+                                    asp-items="ViewBag.Companies"
+                                    class="form-control"
+                                    disabled></select>
+                            <!-- ✅ Valeur envoyée via hidden -->
+                            <input type="hidden" asp-for="CompanyId" />
                         </div>
+                        <small class="text-muted">La société ne peut pas être modifiée.</small>
                         <span asp-validation-for="CompanyId" class="text-danger small"></span>
                     </div>
 
                     <div class="row">
-                       
+                        <!-- Year -->
                         <div class="col-md-6 mb-3">
                             <label asp-for="PeriodYear"></label>
                             <div class="input-group">
@@ -37,6 +46,7 @@
                             <span asp-validation-for="PeriodYear" class="text-danger small"></span>
                         </div>
 
+                        <!-- Month -->
                         <div class="col-md-6 mb-3">
                             <label asp-for="PeriodMonth"></label>
                             <div class="input-group">
@@ -48,7 +58,7 @@
                     </div>
 
                     <div class="row">
-
+                        <!-- Start Date -->
                         <div class="col-md-6 mb-3">
                             <label asp-for="StartDate"></label>
                             <div class="input-group">
@@ -58,6 +68,7 @@
                             <span asp-validation-for="StartDate" class="text-danger small"></span>
                         </div>
 
+                        <!-- End Date -->
                         <div class="col-md-6 mb-3">
                             <label asp-for="EndDate"></label>
                             <div class="input-group">
@@ -69,7 +80,7 @@
                     </div>
 
                     <div class="row">
-                       
+                        <!-- Status -->
                         <div class="col-md-6 mb-3">
                             <label asp-for="Status"></label>
                             <div class="input-group">
@@ -82,6 +93,7 @@
                             <span asp-validation-for="Status" class="text-danger small"></span>
                         </div>
 
+                        <!-- Processed At -->
                         <div class="col-md-6 mb-3">
                             <label asp-for="ProcessedAt"></label>
                             <div class="input-group">
@@ -92,7 +104,6 @@
                             <span asp-validation-for="ProcessedAt" class="text-danger small"></span>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="card-footer d-flex justify-content-between">
