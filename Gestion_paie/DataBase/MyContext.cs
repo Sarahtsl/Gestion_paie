@@ -23,10 +23,6 @@ namespace Gestion_paie.DataBase
         public DbSet<BenefitInKind> BenefitsInKind { get; set; }
         public DbSet<PayrollItem> PayrollItems { get; set; }
 
-
-
-        public DbSet<PayrollPeriod> PayrollPeriods { get; set; }
-        
         public DbSet<RuleName> RuleNames { get; set; }
         public DbSet<AnomalyRule> AnomalyRules { get; set; }
 

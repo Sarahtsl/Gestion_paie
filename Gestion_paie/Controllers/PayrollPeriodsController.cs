@@ -15,6 +15,7 @@ namespace Gestion_paie.Controllers
             _context = context;
         }
 
+        // INDEX
         public async Task<IActionResult> Index()
         {
             var periods = await _context.PayrollPeriods
@@ -22,26 +23,68 @@ namespace Gestion_paie.Controllers
                 .OrderByDescending(p => p.PeriodYear)
                 .ThenByDescending(p => p.PeriodMonth)
                 .ToListAsync();
+
             return View(periods);
         }
 
+        // CREATE (GET) — verrouillé sur la 1ʳᵉ société
         public IActionResult Create()
         {
-            PopulateDropDowns();
-            return View(new PayrollPeriod
+            var model = new PayrollPeriod
             {
                 Status = PayrollPeriodStatus.DRAFT,
                 StartDate = DateTime.Today,
                 EndDate = DateTime.Today
-            });
+            };
+
+            var companies = _context.Companies
+                .AsNoTracking()
+                .OrderBy(c => c.Name)
+                .Select(c => new { c.Id, c.Name })
+                .ToList();
+
+            if (companies.Count == 0)
+            {
+                // Pas de sociétés : on affiche la vue avec un message clair
+                ViewBag.LockCompanySelect = true;
+                ModelState.AddModelError(nameof(model.CompanyId), "Aucune société n'est configurée.");
+                PopulateDropDowns(null);
+                return View(model);
+            }
+
+            // Imposer la 1ʳᵉ société et verrouiller
+            model.CompanyId = companies[0].Id;
+            ViewBag.LockCompanySelect = true;
+
+            PopulateDropDowns(model.CompanyId);
+            return View(model);
         }
 
+        // CREATE (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PayrollPeriod model)
         {
+            // Réimposer côté serveur (sécurité)
+            var firstCompanyId = await _context.Companies
+                .AsNoTracking()
+                .OrderBy(c => c.Name)
+                .Select(c => c.Id)
+                .FirstOrDefaultAsync();
+
+            if (firstCompanyId == 0)
+            {
+                ModelState.AddModelError(nameof(model.CompanyId), "Aucune société n'est configurée.");
+            }
+            else
+            {
+                model.CompanyId = firstCompanyId;
+            }
+
+            // Validations
             if (model.PeriodMonth is < 1 or > 12)
                 ModelState.AddModelError(nameof(model.PeriodMonth), "Le mois doit être entre 1 et 12.");
+
             if (model.EndDate < model.StartDate)
                 ModelState.AddModelError(nameof(model.EndDate), "La date de fin doit être ≥ la date de début.");
 
@@ -55,6 +98,7 @@ namespace Gestion_paie.Controllers
 
             if (!ModelState.IsValid)
             {
+                ViewBag.LockCompanySelect = true; // garder verrouillé au retour
                 PopulateDropDowns(model.CompanyId);
                 return View(model);
             }
@@ -64,6 +108,7 @@ namespace Gestion_paie.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // EDIT (GET) — par défaut non verrouillé
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -71,18 +116,24 @@ namespace Gestion_paie.Controllers
             var period = await _context.PayrollPeriods.FindAsync(id.Value);
             if (period == null) return NotFound();
 
+            ViewBag.LockCompanySelect = false; // mettre true si tu veux le verrouiller ici
             PopulateDropDowns(period.CompanyId);
             return View(period);
         }
 
+        // EDIT (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, PayrollPeriod model)
         {
             if (id != model.Id) return NotFound();
 
+            if (model.CompanyId is null)
+                ModelState.AddModelError(nameof(model.CompanyId), "Veuillez sélectionner une société.");
+
             if (model.PeriodMonth is < 1 or > 12)
                 ModelState.AddModelError(nameof(model.PeriodMonth), "Le mois doit être entre 1 et 12.");
+
             if (model.EndDate < model.StartDate)
                 ModelState.AddModelError(nameof(model.EndDate), "La date de fin doit être ≥ la date de début.");
 
@@ -97,10 +148,12 @@ namespace Gestion_paie.Controllers
 
             if (!ModelState.IsValid)
             {
+                ViewBag.LockCompanySelect = false;
                 PopulateDropDowns(model.CompanyId);
                 return View(model);
             }
 
+            // Ne pas écraser CreatedAt
             _context.Entry(model).Property(x => x.CreatedAt).IsModified = false;
 
             try
@@ -118,6 +171,7 @@ namespace Gestion_paie.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // DELETE
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
@@ -130,18 +184,21 @@ namespace Gestion_paie.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-  
+
+        // Helper: liste sociétés
         private void PopulateDropDowns(int? selectedCompanyId = null)
         {
-            ViewBag.Companies = _context.Companies
+            var companies = _context.Companies
+                .AsNoTracking()
                 .OrderBy(c => c.Name)
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name,
-                    Selected = selectedCompanyId != null && c.Id == selectedCompanyId
-                })
                 .ToList();
+
+            ViewBag.Companies = new SelectList(
+                companies,
+                nameof(Company.Id),
+                nameof(Company.Name),
+                selectedCompanyId
+            );
         }
     }
 }
