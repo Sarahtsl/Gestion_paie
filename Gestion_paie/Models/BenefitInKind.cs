@@ -22,7 +22,7 @@ namespace GestionPaie.Models
 
         [MaxLength(200)]
         [Column("description")]
-        public string? Description { get; set; }
+        public string Description { get; set; } = "";
 
         [Required]
         [Column("value", TypeName = "decimal(12,2)")]

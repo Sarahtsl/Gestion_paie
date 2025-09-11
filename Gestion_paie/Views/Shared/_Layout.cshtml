@@ -332,7 +332,12 @@
                                         <p>Ajouter Periods</p>
                                     </a>
                                 </li>
-
+                                <li class="nav-item">
+                                    <a asp-controller="Payroll" asp-action="index" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>fiche de paie</p>
+                                    </a>
+                                </li>
 
                             </ul>
                         </li>
@@ -442,6 +447,10 @@
     <script src="~/dist/js/demo.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="~/dist/js/pages/dashboard.js"></script>
+   
     @RenderSection("Scripts", required: false)
+  
 </body>
+
+
 </html>

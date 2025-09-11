@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Gestion_paie.DataBase;
+using Rotativa.AspNetCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
+
+RotativaConfiguration.Setup(app.Environment.WebRootPath, "Rotativa");
+
 
 if (!app.Environment.IsDevelopment())
 {

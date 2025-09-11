@@ -1,0 +1,149 @@
+﻿@model Gestion_paie.Models.Payroll
+@using System.Globalization
+@{
+    Layout = null;
+    var employee = Model.Employee;
+    var company = employee.Company;
+    string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.PayrollPeriod.PeriodMonth);
+}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <title>Bulletin de Paie</title>
+    <style>
+        body {
+            font-family: Arial;
+            font-size: 13px;
+            margin: 30px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #000;
+            padding-bottom: 5px;
+        }
+
+        .section-title {
+            margin: 15px 0 5px;
+            font-weight: bold;
+            border-bottom: 1px solid #000;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th, td {
+            padding: 5px 8px;
+        }
+
+        th {
+            background: #f4f4f4;
+            border-bottom: 1px solid #ccc;
+            text-align: left;
+        }
+
+        td.right {
+            text-align: right;
+        }
+
+        tr:not(:last-child) td {
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .net {
+            margin-top: 20px;
+            padding: 10px;
+            font-weight: bold;
+            background: #f4f4f4;
+            border: 2px solid #000;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h2>Bulletin de Paie</h2>
+
+    <table style="margin-bottom:20px; border: 1px solid #000;">
+        <tr>
+            <td style="width:50%; vertical-align:top; padding:8px;">
+                <strong>Entreprise :</strong><br />
+                @(company?.Name ?? "Non renseignée") <br />
+                @(company?.Address ?? "") <br />
+                Téléphone : @(company?.Phone ?? "") <br />
+                Email : @(company?.Email ?? "")
+            </td>
+            <td style="width:50%; vertical-align:top; padding:8px;">
+                <strong>Employé :</strong><br />
+                @employee.FirstName @employee.LastName <br />
+                CIN : @employee.CIN <br />
+                Poste : @employee.Position <br />
+                Département : @employee.Department
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:8px;">
+                <strong>Période :</strong><br />
+                @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.PayrollPeriod.PeriodMonth) @Model.PayrollPeriod.PeriodYear
+            </td>
+ 
+            <td style="padding:8px;">
+                <strong>Date d’édition :</strong><br />
+                @DateTime.Now.ToString("dd/MM/yyyy")
+            </td>
+        </tr>
+    </table>
+
+
+    <div class="section-title">Rémunérations</div>
+    <table>
+        <tr><th>Code</th><th>Libellé</th><th class="right">Montant (€)</th></tr>
+        <tr><td>BASE</td><td>Salaire de base</td><td class="right">@Model.BaseSalary.ToString("N2")</td></tr>
+        <tr><td>HSUP</td><td>Heures supplémentaires (@Model.OvertimeHours h)</td><td class="right">@Model.OvertimeAmount.ToString("N2")</td></tr>
+        <tr><td>PRIME</td><td>Prime</td><td class="right">@Model.BonusAmount.ToString("N2")</td></tr>
+        <tr><td colspan="2"><strong>Total Brut</strong></td><td class="right"><strong>@Model.GrossSalary.ToString("N2")</strong></td></tr>
+    </table>
+
+    <div class="section-title">Avantages en nature</div>
+    <table>
+        <tr><th>Type</th><th class="right">Valeur (€)</th><th class="right">Valeur imposable (€)</th></tr>
+        @foreach (var bik in Model.Benefits)
+        {
+            <tr>
+                <td>@bik.BenefitType.Name</td>
+                
+                <td class="right">@bik.Value.ToString("N2")</td>
+                <td class="right">@bik.TaxableValue.ToString("N2")</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="2"><strong>Total</strong></td>
+
+            <td class="right"><strong>@Model.Benefits.Sum(b => b.TaxableValue).ToString("N2")</strong></td>
+        </tr>
+    </table>
+
+    <div class="section-title">Retenues</div>
+    <table>
+        <tr><th>Code</th><th>Libellé</th><th class="right">Montant (€)</th></tr>
+        <tr><td>CNSSFAM</td><td>CNSS Allocation Familiale</td><td class="right">@Model.CnssFamilyAllowance.ToString("N2")</td></tr>
+        <tr><td>CNSSAMO</td><td>CNSS AMO</td><td class="right">@Model.CnssAmo.ToString("N2")</td></tr>
+        <tr><td>CNSSACC</td><td>CNSS Accident</td><td class="right">@Model.CnssAccident.ToString("N2")</td></tr>
+        <tr><td>CNSSRET</td><td>CNSS Retraite</td><td class="right">@Model.CnssRetirement.ToString("N2")</td></tr>
+        <tr><td>IR</td><td>Impôt sur le revenu</td><td class="right">@Model.IncomeTax.ToString("N2")</td></tr>
+        <tr>
+            <td colspan="2"><strong>Total Retenues</strong></td>
+            <td class="right"><strong>@((Model.CnssFamilyAllowance + Model.CnssAmo + Model.CnssAccident + Model.CnssRetirement + Model.IncomeTax).ToString("N2"))</strong></td>
+
+        </tr>
+    </table>
+
+    <p class="net">NET À PAYER : @Model.NetSalary.ToString("N2")</p>
+</body>
+</html>
