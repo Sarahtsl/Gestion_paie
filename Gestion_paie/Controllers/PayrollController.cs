@@ -1,11 +1,14 @@
 ﻿using Gestion_paie.DataBase;
 using Gestion_paie.Models;
+using GestionPaie.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Rotativa.AspNetCore;
 
 namespace Gestion_paie.Controllers
 {
+    
     public class PayrollController : Controller
     {
         private readonly MyContext _context;
@@ -50,15 +53,28 @@ namespace Gestion_paie.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            int employeeId,
-            int periodId,
-            decimal overtimeHours,
-            decimal bonusAmount,
-            List<int> benefitTypeIds,
-            List<decimal> values,
-            List<decimal> taxableValues,
-            List<string> descriptions)  
+       int employeeId,
+       int periodId,
+       decimal overtimeHours,
+       decimal bonusAmount,
+       List<int> benefitTypeIds,
+       List<decimal> values,
+       List<decimal> taxableValues,
+       List<string> descriptions)
         {
+            bool exists = await _context.Payrolls
+                .AnyAsync(p => p.EmployeeId == employeeId && p.PeriodId == periodId);
+
+            if (exists)
+            {
+                TempData["Error"] = "Une fiche de paie existe déjà pour cet employé dans cette période.";
+               
+                ViewBag.Employees = await _context.Employees.ToListAsync();
+                ViewBag.Periods = await _context.PayrollPeriods.ToListAsync();
+                ViewBag.BenefitTypes = await _context.BenefitTypes.ToListAsync();
+                return View();
+            }
+
             var payroll = await _payrollService.GeneratePayrollAsync(employeeId, periodId, overtimeHours, bonusAmount);
 
             if (benefitTypeIds != null && benefitTypeIds.Count > 0)
@@ -69,6 +85,7 @@ namespace Gestion_paie.Controllers
             TempData["Message"] = $"Fiche de paie générée pour {payroll.Employee.FirstName} {payroll.Employee.LastName}";
             return RedirectToAction(nameof(Index));
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -98,6 +115,7 @@ namespace Gestion_paie.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+       
 
         [HttpPost]
         public async Task<IActionResult> AddBenefits(
@@ -105,7 +123,7 @@ namespace Gestion_paie.Controllers
             List<int> benefitTypeIds,
             List<decimal> values,
             List<decimal> taxableValues,
-            List<string> descriptions)   // <-- Ajouter descriptions ici aussi
+            List<string> descriptions)   
         {
             try
             {
@@ -143,5 +161,102 @@ namespace Gestion_paie.Controllers
                 PageMargins = new Rotativa.AspNetCore.Options.Margins(20, 20, 20, 20)
             };
         }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var payroll = await _context.Payrolls
+                .Include(p => p.Employee)
+                .Include(p => p.PayrollPeriod)
+                .Include(p => p.Benefits)
+                    .ThenInclude(b => b.BenefitType)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (payroll == null) return NotFound();
+            if (payroll.Status == PayrollStatus.PAID)
+            {
+                TempData["Error"] = "Impossible de modifier une fiche déjà payée.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.BenefitTypes = await _context.BenefitTypes.ToListAsync();
+            return View(payroll);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(
+      int id,
+      decimal overtimeHours,
+      decimal bonusAmount,
+      List<int> benefitTypeIds,
+      List<decimal> values,
+      List<decimal> taxableValues,
+      List<string> descriptions)
+        {
+            var payroll = await _context.Payrolls.FindAsync(id);
+            if (payroll == null) return NotFound();
+
+            if (payroll.Status == PayrollStatus.PAID)
+            {
+                TempData["Error"] = "Impossible de modifier une fiche déjà payée.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            try
+            {
+                await _payrollService.UpdatePayrollAsync(id, overtimeHours, bonusAmount, benefitTypeIds, values, taxableValues, descriptions);
+                TempData["Message"] = "Fiche de paie mise à jour avec succès.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Erreur : {ex.Message}";
+                return RedirectToAction(nameof(Edit), new { id });
+            }
+        }
+
+
+        private bool IsValidTransition(PayrollStatus current, PayrollStatus target)
+        {
+            return (current == PayrollStatus.DRAFT && target == PayrollStatus.VALIDATED)
+                   || (current == PayrollStatus.VALIDATED && target == PayrollStatus.PAID);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeStatus(int id, PayrollStatus target)
+        {
+            var payroll = await _context.Payrolls.FindAsync(id);
+            if (payroll == null) return NotFound();
+
+            if (!IsValidTransition(payroll.Status, target))
+            {
+                TempData["Error"] = "Transition d'état non autorisée.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            payroll.Status = target;
+            try
+            {
+                _context.Update(payroll);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = $"État changé en {target}.";
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                TempData["Error"] = "Conflit lors de la mise à jour. Réessayez.";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public Task<IActionResult> Validate(int id) => ChangeStatus(id, PayrollStatus.VALIDATED);
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public Task<IActionResult> Pay(int id) => ChangeStatus(id, PayrollStatus.PAID);
+
     }
 }

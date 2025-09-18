@@ -76,63 +76,7 @@
                 </li>
 
                 <!-- Messages Dropdown Menu -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-comments"></i>
-                        <span class="badge badge-danger navbar-badge">3</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Brad Diesel
-                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">Call me whenever you can...</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        John Pierce
-                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">I got your message bro</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Nora Silvester
-                                        <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">The subject goes here</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                    </div>
-                </li>
+              
                 <!-- Notifications Dropdown Menu -->
 
                 <li class="nav-item">
@@ -215,7 +159,70 @@
                                             <p>Gestion des rôles</p>
                                         </a>
                                     </li>
+
                                 </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-copy"></i>
+                                    <p>
+                                        CNSS / TAX
+                                        <i class="fas fa-angle-left right"></i>
+
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+
+                                    <li class="nav-item">
+                                        <a asp-controller="CnssRates" asp-action="Index" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>CnssRates</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a asp-controller="TaxBrackets" asp-action="Index" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p> Liste de Tax</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a asp-controller="TaxDeduction" asp-action="Index" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p> Tax Deduction  </p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-edit"></i>
+                                    <p>
+                                        Fiche De Paie
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a asp-controller="PayrollPeriods" asp-action="Index" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Afficher Periods</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a asp-controller="Payroll" asp-action="index" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p> Telecharger PDF </p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+
                             </li>
                         }
 
@@ -244,116 +251,70 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-copy"></i>
+                                    <p>
+                                        CNSS / TAX
+                                        <i class="fas fa-angle-left right"></i>
+
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+
+                                    <li class="nav-item">
+                                        <a asp-controller="CnssRates" asp-action="Index" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>CnssRates</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a asp-controller="TaxBrackets" asp-action="Index" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p> Liste de Tax</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a asp-controller="TaxDeduction" asp-action="Index" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p> Tax Deduction  </p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-edit"></i>
+                                    <p>
+                                        Fiche De Paie
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a asp-controller="PayrollPeriods" asp-action="Index" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Afficher Periods</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a asp-controller="Payroll" asp-action="index" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p> Telecharger PDF </p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
+
                         }
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>
-                                    Taux
-                                    <i class="fas fa-angle-left right"></i>
-
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-                                <li class="nav-item">
-                                    <p class="text-white"> --> CNSS  </p>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a asp-controller="CnssRates" asp-action="Index" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>CnssRates</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a asp-controller="CnssRates" asp-action="Create" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Ajouter CNSS</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <p class="text-white">  --> TAX  </p>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a asp-controller="TaxBrackets" asp-action="Index" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p> Liste de Tax</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a asp-controller="TaxBrackets" asp-action="Create" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Ajouter un Tax</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                   <a asp-controller="TaxDeduction" asp-action="Index" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p> Tax Deduction  </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-controller="TaxDeduction" asp-action="Create" class="nav-link">
-                                         <i class="far fa-circle nav-icon"></i>
-                                          <p> Ajouter Tax_Deduction  </p>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-edit"></i>
-                                <p>
-                                    Payroll
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-                                <li class="nav-item">
-                                    <a asp-controller="PayrollPeriods" asp-action="Index" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Afficher Periods</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a asp-controller="PayrollPeriods" asp-action="Create" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Ajouter Periods</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-controller="Payroll" asp-action="index" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>fiche de paie</p>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-
-                        <li class="nav-header">EXAMPLES</li>
-
-
-                        <li class="nav-item">
-                            <a href="pages/kanban.html" class="nav-link">
-                                <i class="nav-icon fas fa-columns"></i>
-                                <p>
-                                    Kanban Board
-                                </p>
-                            </a>
-                        </li>
-
 
                         <li class="nav-item">
                             <a href="#" class="nav-link">

@@ -1,0 +1,129 @@
+﻿@model Gestion_paie.Models.Payroll
+
+@{
+    ViewData["Title"] = "Modifier une fiche de paie";
+    Layout = "_Layout";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-11">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title m-0">
+                    <i class="fas fa-edit"></i> @ViewData["Title"]
+                </h3>
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+
+                    <table class="table table-bordered align-middle">
+                        <tbody>
+                            <tr>
+                                <th style="width: 25%">Employé</th>
+                                <td>
+                                    <input type="text" value="@Model.Employee.FirstName @Model.Employee.LastName" class="form-control" readonly />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Période</th>
+                                <td>
+                                    <input type="text"
+                                           value="@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.PayrollPeriod.PeriodMonth) @Model.PayrollPeriod.PeriodYear"
+                                           class="form-control" readonly />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Heures supplémentaires</th>
+                                <td>
+                                    <input type="number" step="0.01" name="overtimeHours" value="@Model.OvertimeHours" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Prime</th>
+                                <td>
+                                    <input type="number" step="0.01" name="bonusAmount" value="@Model.BonusAmount" class="form-control" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h5 class="mt-4 mb-2">Avantages en nature</h5>
+                    <div id="benefits-container">
+                        @foreach (var benefit in Model.Benefits)
+                        {
+                            <div class="row mb-2 benefit-row">
+                                <div class="col-md-3">
+                                    <select name="benefitTypeIds" class="form-control">
+                                        @foreach (var type in ViewBag.BenefitTypes)
+                                        {
+                                            <option value="@type.Id" selected="@(benefit.BenefitTypeId == type.Id)">
+                                                @type.Name
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" step="0.01" name="values" value="@benefit.Value" class="form-control" />
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" step="0.01" name="taxableValues" value="@benefit.TaxableValue" class="form-control" />
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="descriptions" value="@benefit.Description" class="form-control" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <button type="button" class="btn btn-outline-primary btn-sm mb-3" id="add-benefit">
+                        <i class="fas fa-plus"></i> Ajouter un avantage
+                    </button>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Annuler
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Enregistrer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("add-benefit").addEventListener("click", function () {
+            let container = document.getElementById("benefits-container");
+
+            let newRow = document.createElement("div");
+            newRow.classList.add("row", "mb-2", "benefit-row");
+
+            newRow.innerHTML = `
+                        <div class="col-md-3">
+                            <select name="benefitTypeIds" class="form-control">
+        @foreach (var type in ViewBag.BenefitTypes)
+        {
+                                        <option value="@type.Id">@type.Name</option>
+        }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" step="0.01" name="values" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" step="0.01" name="taxableValues" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="descriptions" class="form-control" />
+                        </div>
+                    `;
+
+            container.appendChild(newRow);
+        });
+    </script>
+}

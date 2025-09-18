@@ -68,26 +68,60 @@
                             </td>
                             <td>@payroll.GrossSalary.ToString("C")</td>
                             <td>@payroll.NetSalary.ToString("C")</td>
-                            <td>
+                            <td class="d-flex align-items-center justify-content-between">
+                                @* Badge état à gauche *@
                                 <span class="badge
-                                    @(payroll.Status == Gestion_paie.Models.PayrollStatus.VALIDATED ? "bg-success" :
-                                      payroll.Status == Gestion_paie.Models.PayrollStatus.PAID ? "bg-primary" :
-                                      "bg-warning")">
+        @(payroll.Status == Gestion_paie.Models.PayrollStatus.VALIDATED ? "bg-success" :
+          payroll.Status == Gestion_paie.Models.PayrollStatus.PAID ? "bg-primary" :
+          "bg-warning")">
                                     @payroll.Status
                                 </span>
+
+                                @* Boutons actions à droite *@
+                                <div class="ms-2">
+                                    @if (payroll.Status == Gestion_paie.Models.PayrollStatus.DRAFT)
+                                    {
+                                        <form asp-action="Validate" asp-route-id="@payroll.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-success btn-validate" title="Valider">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (payroll.Status == Gestion_paie.Models.PayrollStatus.VALIDATED)
+                                    {
+                                        <form asp-action="Pay" asp-route-id="@payroll.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-primary btn-pay" title="Payer">
+                                                <i class="fas fa-credit-card"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
                             </td>
+
                             <td>@payroll.CreatedAt.ToShortDateString()</td>
                             <td>
+                                @if (payroll.Status != Gestion_paie.Models.PayrollStatus.PAID)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@payroll.Id" class="btn btn-sm btn-warning me-1">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                }
+
                                 <a asp-action="DownloadPdf" asp-route-id="@payroll.Id" class="btn btn-sm btn-primary me-1">
                                     <i class="fas fa-file-pdf"></i>
                                 </a>
-                                <form asp-action="Delete" method="post" class="d-inline">
-                                    <input type="hidden" name="id" value="@payroll.Id" />
-                                    <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Voulez-vous vraiment supprimer cette fiche ?');">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+
+                                
+                                    <form asp-action="Delete" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@payroll.Id" />
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Voulez-vous vraiment supprimer cette fiche ?');">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                
                             </td>
                         </tr>
                     }
@@ -102,3 +136,15 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        document.addEventListener("click", function (e) {
+            if (e.target.closest(".btn-validate")) {
+                if (!confirm("Confirmer la validation de cette fiche de paie ?")) e.preventDefault();
+            }
+            if (e.target.closest(".btn-pay")) {
+                if (!confirm("Marquer comme PAYÉ ? Cette action est définitive.")) e.preventDefault();
+            }
+        });
+    </script>
+}

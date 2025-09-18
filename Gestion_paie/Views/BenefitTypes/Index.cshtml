@@ -1,0 +1,43 @@
+﻿@model IEnumerable<GestionPaie.Models.BenefitType>
+
+@{
+    ViewData["Title"] = "Liste des avantages";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Ajouter un avantage
+    </a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Id</th>
+            <th>Nom de l’avantage</th>
+            <th style="width: 100px">Actions</th>
+        </tr>
+    </thead>
+    <tbody id="benefitsTableBody">
+        @foreach (var item in Model)
+        {
+            <tr id="row-@item.Id">
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline"
+                          onsubmit="return confirm('Voulez-vous vraiment supprimer ce type ?');">
+                        <button type="submit" class="btn btn-sm btn-danger" title="Supprimer">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

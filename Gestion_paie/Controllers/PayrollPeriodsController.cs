@@ -1,11 +1,13 @@
 ﻿using Gestion_paie.DataBase;
 using Gestion_paie.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gestion_paie.Controllers
 {
+  
     public class PayrollPeriodsController : Controller
     {
         private readonly MyContext _context;

@@ -2,10 +2,13 @@
 using Gestion_paie.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+
 
 namespace Gestion_paie.Controllers
 {
+   
     public class CnssRatesController : Controller
     {
         private readonly MyContext _context;

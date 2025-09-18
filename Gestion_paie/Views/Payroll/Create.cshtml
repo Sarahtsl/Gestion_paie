@@ -4,136 +4,107 @@
 }
 
 <div class="row justify-content-center mt-4">
-    <div class="col-md-8">
-        <div class="card card-primary shadow-sm">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-plus-circle"></i> @ViewData["Title"]
+    <div class="col-md-11">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title m-0">
+                    <i class="fas fa-file-invoice-dollar"></i> @ViewData["Title"]
                 </h3>
             </div>
 
             <div class="card-body">
-                <form asp-action="Create" method="post">
-
-                    <div class="form-group mb-3">
-                        <label class="form-label">Employé</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            <select name="employeeId" class="form-control" required>
-                                <option value="">-- Sélectionnez un employé --</option>
-                                @foreach (var emp in ViewBag.Employees)
-                                {
-                                    <option value="@emp.Id">@emp.FirstName @emp.LastName</option>
-                                }
-                            </select>
-                        </div>
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i> @TempData["Error"]
                     </div>
+                }
+                <form asp-action="Create" method="post" id="payrollForm">
+                    <table class="table table-bordered align-middle">
+                        <tbody>
+                            <tr>
+                                <th style="width: 25%">Employé</th>
+                                <td>
+                                    <select name="employeeId" class="form-control" required>
+                                        <option value="">-- Sélectionnez un employé --</option>
+                                        @foreach (var emp in ViewBag.Employees)
+                                        {
+                                            <option value="@emp.Id">@emp.FirstName @emp.LastName</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Période</th>
+                                <td>
+                                    <select name="periodId" class="form-control" required>
+                                        <option value="">-- Sélectionnez une période --</option>
+                                        @foreach (var period in ViewBag.Periods)
+                                        {
+                                            <option value="@period.Id">
+                                                @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(period.PeriodMonth) @period.PeriodYear
+                                            </option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Heures Supplémentaires</th>
+                                <td>
+                                    <input type="number" step="0.01" class="form-control" name="overtimeHours" value="0" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Prime</th>
+                                <td>
+                                    <input type="number" step="0.01" class="form-control" name="bonusAmount" value="0" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                    <div class="form-group mb-3">
-                        <label class="form-label">Période</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                            <select name="periodId" class="form-control" required>
-                                <option value="">-- Sélectionnez une période --</option>
-                                @foreach (var period in ViewBag.Periods)
-                                {
-                                    <option value="@period.Id">
-                                        @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(period.PeriodMonth) @period.PeriodYear
-                                    </option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label class="form-label">Heures Supplémentaires</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                            <input type="number" step="0.01" class="form-control" name="overtimeHours" value="0" />
-                        </div>
-                    </div>
-
-                    <div class="form-group mb-4">
-                        <label class="form-label">Prime</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-coins"></i></span>
-                            <input type="number" step="0.01" class="form-control" name="bonusAmount" value="0" />
-                        </div>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#benefitsModal">
-                            <i class="fas fa-plus"></i> Ajouter des avantages
-                        </button>
-                    </div>
-
-                    <div class="modal fade" id="benefitsModal" tabindex="-1" aria-labelledby="benefitsModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header bg-primary text-white">
-                                    <h5 class="modal-title">Sélectionner des avantages en nature</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <table class="table table-bordered table-sm align-middle">
-                                        <thead>
-                                            <tr>
-                                                <th>Sélection</th>
-                                                <th>Type</th>
-                                                <th>Valeur (€)</th>
-                                                <th>Valeur imposable (€)</th>
-                                                <th>Description</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @for (int i = 0; i < (ViewBag.BenefitTypes as List<GestionPaie.Models.BenefitType>).Count; i++)
-                                            {
-                                                var type = (ViewBag.BenefitTypes as List<GestionPaie.Models.BenefitType>)[i];
-                                                <tr>
-                                                    <td>
-                                                        <input type="checkbox" class="benefit-checkbox" />
-                                                        <input type="hidden" name="benefitTypeIds" value="@type.Id" disabled />
-                                                    </td>
-                                                    <td>@type.Name</td>
-                                                    <td><input type="number" step="0.01" name="values" class="form-control" value="0" disabled /></td>
-                                                    <td><input type="number" step="0.01" name="taxableValues" class="form-control" value="0" disabled /></td>
-                                                    <td><input type="text" name="descriptions" class="form-control" value="@type.Name" disabled /></td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addBenefitTypeModal">
-                                        <i class="fas fa-plus"></i> Ajouter un type de benefit
+                    <h5 class="mt-4 mb-2">Avantages en nature</h5>
+                    <table class="table table-bordered table-sm align-middle" id="benefitsTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 30%">
+                                    Type
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" id="addNewBenefitTypeBtn">
+                                        <i class="fas fa-plus"></i>
                                     </button>
-                                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Valider</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                </th>
+                                <th style="width: 15%">Valeur (€)</th>
+                                <th style="width: 20%">Valeur imposable (€)</th>
+                                <th>Description</th>
+                                <th style="width: 5%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <select name="benefitTypeIds" class="form-control">
+                                        <option value="">-- Sélectionnez --</option>
+                                        @foreach (var type in ViewBag.BenefitTypes as List<GestionPaie.Models.BenefitType>)
+                                        {
+                                            <option value="@type.Id">@type.Name</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td><input type="number" step="0.01" name="values" class="form-control" value="0" /></td>
+                                <td><input type="number" step="0.01" name="taxableValues" class="form-control" value="0" /></td>
+                                <td><input type="text" name="descriptions" class="form-control" /></td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-danger btn-sm remove-row"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                    <div class="modal fade" id="addBenefitTypeModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-success text-white">
-                                    <h5 class="modal-title">Nouveau type de benefit</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form id="addBenefitTypeForm">
-                                        <div class="mb-3">
-                                            <label>Nom du type</label>
-                                            <input type="text" id="benefitTypeName" class="form-control" required />
-                                        </div>
-                                        <button type="submit" class="btn btn-success">Ajouter</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <button type="button" class="btn btn-outline-primary btn-sm" id="addBenefit">
+                        <i class="fas fa-plus"></i> Ajouter un avantage
+                    </button>
 
-                    <div class="d-flex justify-content-between mt-3">
+                    <div class="d-flex justify-content-between mt-4">
                         <a asp-action="Index" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Annuler
                         </a>
@@ -141,81 +112,77 @@
                             <i class="fas fa-save"></i> Générer
                         </button>
                     </div>
-
                 </form>
             </div>
         </div>
     </div>
 </div>
 
+<div class="modal fade" id="benefitTypeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Ajouter un nouveau type</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nom de l’avantage</label>
+                    <input type="text" class="form-control" id="newBenefitName" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-success" id="saveNewBenefit">Ajouter</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }       
-}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const addBenefitBtn = document.getElementById("addBenefit");
+            const addNewBenefitBtn = document.getElementById("addNewBenefitTypeBtn");
+            const saveNewBenefitBtn = document.getElementById("saveNewBenefit");
+            const newBenefitInput = document.getElementById("newBenefitName");
+            const modal = new bootstrap.Modal(document.getElementById('benefitTypeModal'));
+            const selectTemplate = document.querySelector("#benefitsTable tbody tr select");
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            addBenefitBtn.addEventListener("click", function () {
+                const tableBody = document.querySelector("#benefitsTable tbody");
+                const newRow = tableBody.rows[0].cloneNode(true);
+                newRow.querySelectorAll("input, select").forEach(el => el.value = (el.tagName === "SELECT" ? "" : el.type === "number" ? 0 : ""));
+                tableBody.appendChild(newRow);
+            });
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-        document.querySelectorAll(".benefit-checkbox").forEach(cb => {
-            cb.addEventListener("change", function () {
-                const row = this.closest("tr");
-                const inputs = row.querySelectorAll("input[type=number], input[type=text], input[type=hidden]");
-                if (this.checked) {
-                    inputs.forEach(i => i.disabled = false);
-                } else {
-                    inputs.forEach(i => {
-                        i.disabled = true;
-                        if (i.type === "number") i.value = 0;
-                    });
+            document.addEventListener("click", function (e) {
+                if (e.target.closest(".remove-row")) {
+                    const row = e.target.closest("tr");
+                    const tbody = row.closest("tbody");
+                    if (tbody.rows.length > 1) row.remove();
                 }
             });
-        });
 
-        document.getElementById("addBenefitTypeForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const name = document.getElementById("benefitTypeName").value.trim();
-            if (!name) return alert("Le nom est requis.");
+            addNewBenefitBtn.addEventListener("click", () => {
+                newBenefitInput.value = "";
+                modal.show();
+            });
 
-            fetch('/BenefitType/Create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-                },
-                body: JSON.stringify({ Name: name })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        const tableBody = document.querySelector("#benefitsModal tbody");
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                    <td>
-                        <input type="checkbox" class="benefit-checkbox" />
-                        <input type="hidden" name="benefitTypeIds" value="${data.id}" disabled />
-                    </td>
-                    <td>${data.name}</td>
-                    <td><input type="number" step="0.01" name="values" class="form-control" value="0" disabled /></td>
-                    <td><input type="number" step="0.01" name="taxableValues" class="form-control" value="0" disabled /></td>
-                    <td><input type="text" name="descriptions" class="form-control" value="${data.name}" disabled /></td>
-                `;
-                        tableBody.appendChild(row);
+            saveNewBenefitBtn.addEventListener("click", () => {
+                const name = newBenefitInput.value.trim();
+                if (!name) return alert("Veuillez saisir un nom pour l’avantage");
 
-                        row.querySelector(".benefit-checkbox").addEventListener("change", function () {
-                            const inputs = this.closest("tr").querySelectorAll("input[type=number], input[type=text], input[type=hidden]");
-                            if (this.checked) inputs.forEach(i => i.disabled = false);
-                            else inputs.forEach(i => { i.disabled = true; if (i.type === "number") i.value = 0; });
-                        });
-
-                        bootstrap.Modal.getInstance(document.getElementById('addBenefitTypeModal')).hide();
-                        document.getElementById("addBenefitTypeForm").reset();
-                    } else {
-                        alert("Erreur: " + (data.errors ? data.errors.join(", ") : ""));
-                    }
+                document.querySelectorAll("#benefitsTable tbody tr select").forEach(select => {
+                    const option = document.createElement("option");
+                    option.value = "new_" + Date.now();
+                    option.text = name;
+                    option.selected = true;
+                    select.add(option);
                 });
+
+                modal.hide();
+            });
         });
-    });
-</script>
+    </script>
+}

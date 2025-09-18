@@ -20,6 +20,8 @@ builder.Services.AddDbContext<MyContext>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 
+
+
 var app = builder.Build();
 
 RotativaConfiguration.Setup(app.Environment.WebRootPath, "Rotativa");

@@ -1,6 +1,7 @@
 ﻿using Gestion_paie.DataBase;
 using Gestion_paie.Models;
 using Gestion_paie.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Gestion_paie.Controllers
 {
+   
     public class UserController : Controller
     {
         private readonly MyContext _context;

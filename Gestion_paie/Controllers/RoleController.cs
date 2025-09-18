@@ -3,9 +3,11 @@ using Gestion_paie.DataBase;
 using Gestion_paie.Models;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Gestion_paie.Controllers
 {
+   
     public class RoleController : Controller
     {
         private readonly MyContext _context;

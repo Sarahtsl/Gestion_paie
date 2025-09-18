@@ -70,22 +70,16 @@ namespace Gestion_paie.DataBase
             .HasIndex(bt => bt.Name)
             .IsUnique();
 
-          
-
-
-            // Unicité du nom de règle
             modelBuilder.Entity<RuleName>()
                 .HasIndex(r => r.Name)
                 .IsUnique();
 
-            // FK AnomalyRule → RuleName (pas de cascade sur un référentiel)
             modelBuilder.Entity<AnomalyRule>()
                 .HasOne(a => a.RuleName)
                 .WithMany()
                 .HasForeignKey(a => a.RuleNameId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Stocker les enums en VARCHAR (au lieu d'int)
             modelBuilder.Entity<AnomalyRule>()
                 .Property(a => a.RuleType)
                 .HasConversion<string>()
@@ -96,7 +90,6 @@ namespace Gestion_paie.DataBase
                 .HasConversion<string>()
                 .HasMaxLength(20);
 
-            // Valeur par défaut SQL Server
             modelBuilder.Entity<AnomalyRule>()
                 .Property(a => a.CreatedAt)
                 .HasDefaultValueSql("GETDATE()");

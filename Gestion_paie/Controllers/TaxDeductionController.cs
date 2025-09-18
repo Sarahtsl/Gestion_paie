@@ -1,10 +1,12 @@
 ﻿using Gestion_paie.DataBase; 
 using Gestion_paie.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 namespace Gestion_paie.Controllers
 {
+    
     public class TaxDeductionController : Controller
     {
         private readonly MyContext _context;

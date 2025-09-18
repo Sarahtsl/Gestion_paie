@@ -58,7 +58,7 @@ public class PayrollService
             TaxableIncome = taxableIncome,
             IncomeTax = incomeTax,
             NetSalary = netSalary,
-            Status = PayrollStatus.CALCULATED,
+          
             BenefitsInKind = 0
         };
 
@@ -91,16 +91,17 @@ public class PayrollService
             payroll.Benefits.Add(benefit);
 
             payroll.BenefitsInKind += values[i];
-
-            payroll.TaxableIncome += taxableValues[i];
         }
+
         payroll.GrossSalary += payroll.Benefits.Sum(b => b.TaxableValue);
+
+        payroll.TaxableIncome = payroll.GrossSalary
+            - (payroll.CnssFamilyAllowance + payroll.CnssAmo + payroll.CnssAccident + payroll.CnssRetirement);
 
         payroll.IncomeTax = CalculateIncomeTax(payroll.TaxableIncome);
         payroll.NetSalary = payroll.TaxableIncome - payroll.IncomeTax;
 
         await _context.SaveChangesAsync();
-
     }
 
     private decimal CalculateIncomeTax(decimal taxableIncome)
@@ -121,4 +122,77 @@ public class PayrollService
 
         return 0;
     }
+
+    public async Task<Payroll> UpdatePayrollAsync(
+        int payrollId,
+        decimal overtimeHours,
+        decimal bonusAmount,
+        List<int> benefitTypeIds,
+        List<decimal> values,
+        List<decimal> taxableValues,
+        List<string> descriptions)
+    {
+        var payroll = await _context.Payrolls
+            .Include(p => p.Employee)
+            .Include(p => p.PayrollPeriod)
+            .Include(p => p.Benefits)
+            .FirstOrDefaultAsync(p => p.Id == payrollId);
+
+        if (payroll == null)
+            throw new Exception("Fiche de paie introuvable");
+
+        payroll.OvertimeHours = overtimeHours;
+        payroll.BonusAmount = bonusAmount;
+
+        decimal hourlyRate = payroll.BaseSalary / 173;
+        payroll.OvertimeAmount = overtimeHours * hourlyRate * 1.5m;
+
+        payroll.GrossSalary = payroll.BaseSalary + payroll.OvertimeAmount + payroll.BonusAmount;
+
+        _context.BenefitsInKind.RemoveRange(payroll.Benefits);
+
+        payroll.Benefits = new List<BenefitInKind>();
+        for (int i = 0; i < benefitTypeIds.Count; i++)
+        {
+            var benefit = new BenefitInKind
+            {
+                PayrollId = payroll.Id,
+                BenefitTypeId = benefitTypeIds[i],
+                Value = values[i],
+                TaxableValue = taxableValues[i],
+                Description = descriptions[i],
+                CreatedAt = DateTime.UtcNow
+            };
+
+            payroll.Benefits.Add(benefit);
+            payroll.BenefitsInKind += values[i];
+        }
+
+        payroll.GrossSalary += payroll.Benefits.Sum(b => b.TaxableValue);
+
+        var cnssRate = await _context.CnssRates
+            .Where(r => r.IsActive)
+            .OrderByDescending(r => r.EffectiveDate)
+            .FirstOrDefaultAsync();
+
+        if (cnssRate != null)
+        {
+            payroll.CnssFamilyAllowance = payroll.GrossSalary * (cnssRate.FamilyAllowanceRate ?? 0);
+            payroll.CnssAmo = payroll.GrossSalary * (cnssRate.AmoRate ?? 0);
+            payroll.CnssAccident = payroll.GrossSalary * (cnssRate.AccidentRate ?? 0);
+            payroll.CnssRetirement = payroll.GrossSalary * (cnssRate.RetirementRate ?? 0);
+        }
+
+        payroll.TaxableIncome = payroll.GrossSalary
+            - (payroll.CnssFamilyAllowance + payroll.CnssAmo + payroll.CnssAccident + payroll.CnssRetirement);
+
+        payroll.IncomeTax = CalculateIncomeTax(payroll.TaxableIncome);
+        payroll.NetSalary = payroll.TaxableIncome - payroll.IncomeTax;
+
+        await _context.SaveChangesAsync();
+        return payroll;
+    }
+
 }
+
+

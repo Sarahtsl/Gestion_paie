@@ -1,0 +1,28 @@
+﻿@model GestionPaie.Models.BenefitType
+
+@{
+    ViewData["Title"] = "Modifier un avantage";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group mb-3">
+        <label class="form-label">Nom de l’avantage</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        <i class="fas fa-save"></i> Enregistrer
+    </button>
+    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
